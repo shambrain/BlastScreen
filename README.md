@@ -56,7 +56,7 @@ BlastScreen is a powerful Android application that allows users to bypass the FL
 For any inquiries, feel free to reach out to the project maintainer:
 
 - **Email:** shambrainhd@gmail.com
-- **GitHub:** [@yourusername](https://github.com/shambrain)
+- **GitHub:** [@shambrain](https://github.com/shambrain)
 ```
 ### Clone the Repository
 
