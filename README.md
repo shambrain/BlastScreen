@@ -19,7 +19,45 @@ BlastScreen is a powerful Android application that allows users to bypass the FL
 - Kotlin DSL
 - Android SDK 34
 - Java 17
+### Build the Project
 
+1. Open the project in Android Studio.
+2. Sync the project with Gradle files.
+3. Build and run the app on your device or emulator.
+
+## Usage 📖
+
+1. **Bypass FLAG_SECURE:**
+   - Open the app and select the screen recording option.
+   - BlastScreen will automatically bypass FLAG_SECURE restrictions.
+
+2. **Screen Recording:**
+   - Start recording your screen with audio by tapping the record button.
+   - The recording will be saved in your device's storage.
+
+3. **Screen Sharing:**
+   - Connect to another device running BlastScreen and share your screen in real-time.
+
+## Technical Details 🛠️
+
+- **Language:** Kotlin
+- **Build System:** Gradle with Kotlin DSL
+- **AI Integration:** TensorFlow Lite
+- **Min SDK:** 23
+- **Target SDK:** 34
+- **Libraries Used:**
+  - Material Components
+  - AndroidX Core
+  - Jetpack Compose
+  - TensorFlow Lite
+
+## Contact 📧
+
+For any inquiries, feel free to reach out to the project maintainer:
+
+- **Email:** shambrainhd@gmail.com
+- **GitHub:** [@yourusername](https://github.com/shambrain)
+```
 ### Clone the Repository
 
 ```bash
