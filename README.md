@@ -1,4 +1,4 @@
-# BlastScreen 📱💥
+# BlastScreen 📱💦
 
 ![blast screen logo](https://github.com/user-attachments/assets/72c0c25b-da3a-4a32-bf4b-a667eb2e4b77)  <!-- Add your logo here -->
 
@@ -12,7 +12,7 @@ BlastScreen is a powerful Android application that allows users to bypass the FL
 - **TensorFlow AI Integration:** Adapts to server issues, connection problems, and other challenges to ensure a smooth experience.
 - **Modern UI:** Sleek and intuitive user interface with an orange and white color scheme for ease of use.
 
-## Installation 💾
+## Installation 💾🌊
 
 ### Prerequisites
 - Android Studio Koala 2024
