@@ -1,6 +1,6 @@
 # BlastScreen 📱💥
 
-![BlastScreen Logo](path/to/logo.png)  <!-- Add your logo here -->
+![blast screen logo](https://github.com/user-attachments/assets/72c0c25b-da3a-4a32-bf4b-a667eb2e4b77)  <!-- Add your logo here -->
 
 BlastScreen is a powerful Android application that allows users to bypass the FLAG_SECURE restriction and record the entire screen with audio. It also enables seamless screen sharing between devices, making it easier to collaborate or demonstrate. Designed with a modern, sleek UI in orange and white, BlastScreen is built for performance and reliability.
 
@@ -23,5 +23,5 @@ BlastScreen is a powerful Android application that allows users to bypass the FL
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/BlastScreen.git
+git clone https://github.com/shambrain/BlastScreen.git
 cd BlastScreen
