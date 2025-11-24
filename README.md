@@ -2,61 +2,72 @@
 
 ![blast screen logo](https://github.com/user-attachments/assets/72c0c25b-da3a-4a32-bf4b-a667eb2e4b77)  <!-- Add your logo here -->
 
-BlastScreen is a powerful Android application that allows users to bypass the FLAG_SECURE restriction and record the entire screen with audio. It also enables seamless screen sharing between devices, making it easier to collaborate or demonstrate. Designed with a modern, sleek UI in orange and white, BlastScreen is built for performance and reliability.
 
-## Features 🚀
+---
 
-- **Bypass FLAG_SECURE:** Record screens from any app, even those that restrict recording, without any blackouts.
-- **Screen Recording with Audio:** Capture high-quality screen recordings with audio, perfect for tutorials, presentations, and more.
-- **Seamless Screen Sharing:** Share your screen with another device effortlessly, making collaboration easier than ever.
-- **TensorFlow AI Integration:** Adapts to server issues, connection problems, and other challenges to ensure a smooth experience.
-- **Modern UI:** Sleek and intuitive user interface with an orange and white color scheme for ease of use.
+# **BlastScreen — Random Video Calling, Smart Screen Recording & Sharing**
 
-## Installation 💾🌊
+BlastScreen is a **next-generation Android experience** built for effortless **random video calling**, **smart screen recording**, and **seamless screen sharing** — all wrapped in a **modern, soft blue-and-white** interface designed for comfort, clarity, and simplicity.
 
-### Prerequisites
-- Android Studio Koala 2024
-- Kotlin DSL
-- Android SDK 34
-- Java 17
-### Build the Project
+Powered by advanced real-time communication technology and intelligent performance optimization, BlastScreen delivers a **smooth, stable, and highly polished** user experience from first tap to final frame.
 
-1. Open the project in Android Studio.
-2. Sync the project with Gradle files.
-3. Build and run the app on your device or emulator.
+---
 
-## Usage 📖
+## **✨ What BlastScreen Offers**
 
-1. **Bypass FLAG_SECURE:**
-   - Open the app and select the screen recording option.
-   - BlastScreen will automatically bypass FLAG_SECURE restrictions.
+### **🎥 One-Tap Random Video Calling**
 
-2. **Screen Recording:**
-   - Start recording your screen with audio by tapping the record button.
-   - The recording will be saved in your device's storage.
+Instantly connect with real people worldwide with a single tap.
+High-quality, low-latency video powered by modern RTC architecture.
 
-3. **Screen Sharing:**
-   - Connect to another device running BlastScreen and share your screen in real-time.
+### **🚫 FLAG_SECURE Bypass Recording**
 
-## Technical Details 🛠️
+Record any screen — even protected apps — with **no black screens, no restrictions, no glitches.**
 
-- **Language:** Kotlin
-- **Build System:** Gradle with Kotlin DSL
-- **AI Integration:** TensorFlow Lite
-- **Min SDK:** 23
-- **Target SDK:** 34
-- **Libraries Used:**
-  - Material Components
-  - AndroidX Core
-  - Jetpack Compose
-  - TensorFlow Lite
+### **🎬 High-Quality Screen Recording (With Audio)**
 
-## Contact 📧
+Capture crystal-clear recordings with perfectly synced microphone and internal audio.
 
-For any inquiries, feel free to reach out to the project maintainer:
+### **📡 Seamless Screen Sharing**
 
-- **Email:** shambrainhd@gmail.com
-- **GitHub:** [@shambrain](https://github.com/shambrain)
+Share your screen instantly with another BlastScreen user.
+Smooth, fast, and optimized for real-time collaboration or demonstrations.
+
+### **🧠 TensorFlow-Enhanced Stability**
+
+Integrated AI monitors network conditions, app state, and device performance to:
+
+* Auto-fix call drops
+* Optimize video quality
+* Reduce lag
+* Maintain a stable connection
+
+### **🌈 Soft, Modern UI**
+
+A clean, minimalist interface in **soft blue + milk white**, designed for a calming and premium feel.
+
+### **🔒 No Sign-Up. No Data Collected.**
+
+Just open the app and start using it — completely private and frictionless.
+
+---
+
+## **📎 Contact**
+
+For questions, collaboration, or business inquiries:
+
+**Email:** [shambrainhd@gmail.com](mailto:shambrainhd@gmail.com)
+**GitHub:** [@shambrain](https://github.com/shambrain)
+
+---
+
+If you want, I can also generate:
+✅ App store description
+✅ Promo images text
+✅ Feature bullets for Google Play
+✅ A more polished branding tagline
+Just tell me.
+
 ```
 ### Clone the Repository
 
