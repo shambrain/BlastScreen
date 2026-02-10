@@ -1,76 +1,59 @@
-# BlastScreen 📱💦
+# BlastScreen (Android)
 
-![blast screen logo](https://github.com/user-attachments/assets/72c0c25b-da3a-4a32-bf4b-a667eb2e4b77)  <!-- Add your logo here -->
+BlastScreen is a modern Android app starter focused on:
 
+- Screen recording via `MediaProjection`
+- Foreground-service-compliant capture flow (Android 14/15 friendly)
+- One-tap random video-call handoff using Jitsi Meet rooms
+- Jetpack Compose + Material 3 UI
 
----
+## What this project does now
 
-# **BlastScreen — Random Video Calling, Smart Screen Recording & Sharing**
+✅ Works as a real Android app project you can open in Android Studio and run.
 
-BlastScreen is a **next-generation Android experience** built for effortless **random video calling**, **smart screen recording**, and **seamless screen sharing** — all wrapped in a **modern, soft blue-and-white** interface designed for comfort, clarity, and simplicity.
+✅ Lets users start/stop screen recording with microphone audio.
 
-Powered by advanced real-time communication technology and intelligent performance optimization, BlastScreen delivers a **smooth, stable, and highly polished** user experience from first tap to final frame.
+✅ Saves recordings to `Movies/BlastScreen` as `.mp4` using `MediaStore`.
 
----
+✅ Launches a random Jitsi room URL for instant video-call matching.
 
-## **✨ What BlastScreen Offers**
+## Important platform reality notes
 
-### **🎥 One-Tap Random Video Calling**
+- Android **does not legally/safely allow bypassing** other apps' `FLAG_SECURE` protections for normal Play-compliant apps.
+- This project intentionally follows official Android APIs and policies.
 
-Instantly connect with real people worldwide with a single tap.
-High-quality, low-latency video powered by modern RTC architecture.
+## Stack
 
-### **🚫 FLAG_SECURE Bypass Recording**
+- Kotlin 2.0.21
+- Android Gradle Plugin 8.7.3
+- Jetpack Compose (BOM 2025.01.00)
+- Material 3
+- Min SDK 26, Target SDK 35
 
-Record any screen — even protected apps — with **no black screens, no restrictions, no glitches.**
+## Build
 
-### **🎬 High-Quality Screen Recording (With Audio)**
+1. Open in latest Android Studio.
+2. Install Android SDK 35 and matching build tools.
+3. Sync Gradle.
+4. Run `app` on a real device (recommended for MediaProjection tests).
 
-Capture crystal-clear recordings with perfectly synced microphone and internal audio.
+## Research-backed references
 
-### **📡 Seamless Screen Sharing**
+- MediaProjection overview: https://developer.android.com/media/grow/media-projection
+- Foreground services guidance: https://developer.android.com/develop/background-work/services/foreground-services
+- MediaStore scoped storage: https://developer.android.com/training/data-storage/shared/media
+- Material 3 for Compose: https://developer.android.com/develop/ui/compose/designsystems/material3
+- Jitsi Meet docs: https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-iframe
 
-Share your screen instantly with another BlastScreen user.
-Smooth, fast, and optimized for real-time collaboration or demonstrations.
+## Project structure
 
-### **🧠 TensorFlow-Enhanced Stability**
+- `app/src/main/java/com/blastscreen/app/MainActivity.kt` — Compose UI + permission/launcher flows
+- `app/src/main/java/com/blastscreen/app/recording/ScreenRecordService.kt` — foreground recording service
+- `app/src/main/java/com/blastscreen/app/ui/Theme.kt` — app theme
 
-Integrated AI monitors network conditions, app state, and device performance to:
+## Next recommended upgrades
 
-* Auto-fix call drops
-* Optimize video quality
-* Reduce lag
-* Maintain a stable connection
-
-### **🌈 Soft, Modern UI**
-
-A clean, minimalist interface in **soft blue + milk white**, designed for a calming and premium feel.
-
-### **🔒 No Sign-Up. No Data Collected.**
-
-Just open the app and start using it — completely private and frictionless.
-
----
-
-## **📎 Contact**
-
-For questions, collaboration, or business inquiries:
-
-**Email:** [shambrainhd@gmail.com](mailto:shambrainhd@gmail.com)
-**GitHub:** [@shambrain](https://github.com/shambrain)
-
----
-
-If you want, I can also generate:
-✅ App store description
-✅ Promo images text
-✅ Feature bullets for Google Play
-✅ A more polished branding tagline
-Just tell me.
-
-```
-### Clone the Repository
-
-```bash
-git clone https://github.com/shambrain/BlastScreen.git
-cd BlastScreen
+- Add in-app player/gallery for saved recordings.
+- Add WebRTC-native client (instead of browser handoff) for full call UX control.
+- Add end-to-end encryption strategy docs and privacy policy pages.
+- Add UI tests and baseline profiles for startup performance.
