@@ -16,3 +16,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "BlastScreen"
 include(":app")
+include(":core:designsystem")
+include(":core:network")
+include(":core:webrtc")

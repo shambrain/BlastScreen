@@ -1,5 +1,7 @@
 services:
   blastscreen-backend:
     build: ./backend
+    env_file:
+      - ./backend/.env.example
     ports:
       - "8080:8080"

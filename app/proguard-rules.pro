@@ -1,1 +1,4 @@
-# Keep default rules only for now.
+-keep class org.webrtc.** { *; }
+-dontwarn org.webrtc.**
+-keep class com.google.firebase.** { *; }
+-dontwarn com.google.firebase.**
