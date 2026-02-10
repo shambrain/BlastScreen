@@ -1,76 +1,114 @@
-# BlastScreen 📱💦
+# BlastScreen 3.0
 
-![blast screen logo](https://github.com/user-attachments/assets/72c0c25b-da3a-4a32-bf4b-a667eb2e4b77)  <!-- Add your logo here -->
+BlastScreen 3.0 is a full-stack Android + backend baseline for:
 
-
----
-
-# **BlastScreen — Random Video Calling, Smart Screen Recording & Sharing**
-
-BlastScreen is a **next-generation Android experience** built for effortless **random video calling**, **smart screen recording**, and **seamless screen sharing** — all wrapped in a **modern, soft blue-and-white** interface designed for comfort, clarity, and simplicity.
-
-Powered by advanced real-time communication technology and intelligent performance optimization, BlastScreen delivers a **smooth, stable, and highly polished** user experience from first tap to final frame.
+- Screen recording (MediaProjection + foreground service)
+- Random video matchmaking (backend API)
+- Instant room handoff (Jitsi Meet URL)
+- Modern Android architecture (Compose + ViewModel + Retrofit)
 
 ---
 
-## **✨ What BlastScreen Offers**
+## 1) Tech stack (latest-oriented)
 
-### **🎥 One-Tap Random Video Calling**
+### Android app
+- Kotlin `2.0.21`
+- AGP `8.7.3`
+- Jetpack Compose BOM `2025.01.00`
+- Lifecycle/ViewModel + StateFlow
+- Retrofit + Moshi for backend API
+- minSdk `26`, targetSdk `35`
 
-Instantly connect with real people worldwide with a single tap.
-High-quality, low-latency video powered by modern RTC architecture.
-
-### **🚫 FLAG_SECURE Bypass Recording**
-
-Record any screen — even protected apps — with **no black screens, no restrictions, no glitches.**
-
-### **🎬 High-Quality Screen Recording (With Audio)**
-
-Capture crystal-clear recordings with perfectly synced microphone and internal audio.
-
-### **📡 Seamless Screen Sharing**
-
-Share your screen instantly with another BlastScreen user.
-Smooth, fast, and optimized for real-time collaboration or demonstrations.
-
-### **🧠 TensorFlow-Enhanced Stability**
-
-Integrated AI monitors network conditions, app state, and device performance to:
-
-* Auto-fix call drops
-* Optimize video quality
-* Reduce lag
-* Maintain a stable connection
-
-### **🌈 Soft, Modern UI**
-
-A clean, minimalist interface in **soft blue + milk white**, designed for a calming and premium feel.
-
-### **🔒 No Sign-Up. No Data Collected.**
-
-Just open the app and start using it — completely private and frictionless.
+### Backend
+- FastAPI + Uvicorn (Python 3.12)
+- In-memory matchmaking queue by region
+- Dockerized service
 
 ---
 
-## **📎 Contact**
+## 2) Monorepo structure
 
-For questions, collaboration, or business inquiries:
-
-**Email:** [shambrainhd@gmail.com](mailto:shambrainhd@gmail.com)
-**GitHub:** [@shambrain](https://github.com/shambrain)
+- `app/` Android application
+- `backend/` FastAPI backend
+- `docker-compose.yml` local backend runner
 
 ---
 
-If you want, I can also generate:
-✅ App store description
-✅ Promo images text
-✅ Feature bullets for Google Play
-✅ A more polished branding tagline
-Just tell me.
+## 3) Run backend locally
 
-```
-### Clone the Repository
-
+### Option A: Docker (recommended)
 ```bash
-git clone https://github.com/shambrain/BlastScreen.git
-cd BlastScreen
+docker compose up --build
+```
+
+Backend URL: `http://localhost:8080`
+
+### Option B: Local Python
+```bash
+cd backend
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+uvicorn main:app --host 0.0.0.0 --port 8080
+```
+
+Health check:
+```bash
+curl http://localhost:8080/health
+```
+
+---
+
+## 4) Run Android app
+
+1. Open project in Android Studio (latest stable).
+2. Ensure SDK 35 is installed.
+3. Start backend (above).
+4. Run app on emulator/device.
+   - Emulator default backend URL uses `10.0.2.2:8080`.
+
+> Backend URL is set via `BuildConfig.BACKEND_URL` in `app/build.gradle.kts`.
+
+---
+
+## 5) Implemented features
+
+### Screen recording
+- Runtime permission request for `RECORD_AUDIO`
+- MediaProjection flow through system capture intent
+- Foreground service recording with notification
+- MP4 save to `Movies/BlastScreen` through `MediaStore`
+
+### Random matchmaking flow
+- `GET /health` to verify backend availability
+- `POST /match` to allocate/return room URL
+- In-app match UI state: loading/success/error
+- Open room in browser/Jitsi URL instantly
+
+---
+
+## 6) Production-hardening roadmap
+
+- Replace in-memory queue with Redis/PostgreSQL persistence
+- Add auth tokens + abuse prevention + rate limiting
+- Add WebSocket signaling for richer real-time states
+- Replace browser handoff with native WebRTC SDK
+- Add analytics/crash reporting/privacy policy/legal docs
+- Add CI (lint/test/build), unit tests, and instrumentation tests
+
+---
+
+## 7) Real platform constraints
+
+BlastScreen follows official Android APIs.
+Bypassing third-party `FLAG_SECURE` content is not supported in compliant consumer Android apps.
+
+---
+
+## 8) Reference sources
+
+- MediaProjection: https://developer.android.com/media/grow/media-projection
+- Foreground services: https://developer.android.com/develop/background-work/services/foreground-services
+- MediaStore: https://developer.android.com/training/data-storage/shared/media
+- Compose Material 3: https://developer.android.com/develop/ui/compose/designsystems/material3
+- FastAPI docs: https://fastapi.tiangolo.com/
