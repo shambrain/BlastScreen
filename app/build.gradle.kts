@@ -20,7 +20,7 @@ android {
         versionName = "3.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "BACKEND_URL", '"http://10.0.2.2:8080"')
+        buildConfigField("String", "BACKEND_URL", '"http://10.0.2.2:8080/"')
         buildConfigField("String", "ADMIN_PROVISION_USERNAME_1", '"milkyplump"')
         buildConfigField("String", "ADMIN_PROVISION_USERNAME_2", '"monster"')
     }

@@ -21,17 +21,17 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -51,14 +51,14 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.perf.ktx.performance
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.util.UUID
 
 data class MainUiState(
+    val token: String? = null,
     val remainingMinutes: Int = 30,
     val sessionId: String? = null,
     val backendStatus: String = "idle",
@@ -72,29 +72,41 @@ class MainViewModel : ViewModel() {
     private val _state = MutableStateFlow(MainUiState())
     val state: StateFlow<MainUiState> = _state.asStateFlow()
 
-    fun fetchUsage(token: String) = viewModelScope.launch {
-        runCatching { repo.usage(token) }
-            .onSuccess { _state.value = _state.value.copy(remainingMinutes = it.remainingMinutes, backendStatus = "usage_ok") }
-            .onFailure { _state.value = _state.value.copy(error = it.message, backendStatus = "usage_fail") }
+    fun ensureGuestSession() = viewModelScope.launch {
+        if (_state.value.token != null) return@launch
+        runCatching { repo.guestToken() }
+            .onSuccess { token -> _state.update { it.copy(token = token, backendStatus = "guest_ok") } }
+            .onFailure { throwable -> _state.update { it.copy(error = throwable.message, backendStatus = "guest_fail") } }
     }
 
-    fun joinQueue(token: String) = viewModelScope.launch {
+    fun fetchUsage() = withToken { token ->
+        runCatching { repo.usage(token) }
+            .onSuccess { _state.update { s -> s.copy(remainingMinutes = it.remainingMinutes, backendStatus = "usage_ok") } }
+            .onFailure { _state.update { s -> s.copy(error = it.message, backendStatus = "usage_fail") } }
+    }
+
+    fun joinQueue() = withToken { token ->
         runCatching { repo.join(token) }
-            .onSuccess { _state.value = _state.value.copy(sessionId = it.sessionId, backendStatus = it.status, error = null) }
-            .onFailure { _state.value = _state.value.copy(error = it.message, backendStatus = "queue_fail") }
+            .onSuccess { _state.update { s -> s.copy(sessionId = it.sessionId, backendStatus = it.status, error = null) } }
+            .onFailure { _state.update { s -> s.copy(error = it.message, backendStatus = "queue_fail") } }
     }
 
     fun hiddenAdminProvision(username: String, store: AdminTokenStore) = viewModelScope.launch {
         runCatching { repo.adminProvision(username) }
             .onSuccess {
                 store.save(it.accessToken)
-                _state.value = _state.value.copy(isAdmin = true, backendStatus = "admin_ok", error = null)
+                _state.update { s -> s.copy(isAdmin = true, backendStatus = "admin_ok", error = null) }
             }
-            .onFailure { _state.value = _state.value.copy(error = it.message, backendStatus = "admin_fail") }
+            .onFailure { _state.update { s -> s.copy(error = it.message, backendStatus = "admin_fail") } }
     }
 
     fun cycleLayoutMode() {
-        _state.value = _state.value.copy(layoutMode = (_state.value.layoutMode + 1) % 3)
+        _state.update { it.copy(layoutMode = (it.layoutMode + 1) % 3) }
+    }
+
+    private fun withToken(block: suspend (String) -> Unit) = viewModelScope.launch {
+        val token = _state.value.token ?: return@launch
+        block(token)
     }
 }
 
@@ -108,6 +120,7 @@ class MainActivity : ComponentActivity() {
         val logger = FirebaseEventLogger(FirebaseAnalytics.getInstance(this))
         logger.appOpen()
         Firebase.performance.isPerformanceCollectionEnabled = true
+        viewModel.ensureGuestSession()
 
         setContent { BlastTheme { BlastScreenRoot(viewModel, logger) } }
     }
@@ -117,12 +130,11 @@ class MainActivity : ComponentActivity() {
 @Composable
 private fun BlastScreenRoot(viewModel: MainViewModel, logger: FirebaseEventLogger) {
     val context = LocalContext.current
-    val state by viewModel.state.collectAsStateWithLifecycleCompat()
+    val state by viewModel.state.collectAsState()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     var hiddenTap by remember { mutableIntStateOf(0) }
     val tokenStore = remember { AdminTokenStore(context) }
-    val sessionToken = remember { mutableStateOf(UUID.randomUUID().toString()) }
 
     val projectionManager = remember { context.getSystemService(MediaProjectionManager::class.java) }
     val permissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { }
@@ -163,26 +175,24 @@ private fun BlastScreenRoot(viewModel: MainViewModel, logger: FirebaseEventLogge
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Button(onClick = {
                         logger.startCall()
-                        viewModel.joinQueue(sessionToken.value)
+                        viewModel.joinQueue()
                     }) { Text("Tap to Random Call") }
 
-                    Button(onClick = {
-                        viewModel.cycleLayoutMode()
-                    }) { Text("Toggle Layout") }
+                    Button(onClick = { viewModel.cycleLayoutMode() }) { Text("Toggle Layout") }
                 }
 
-                Button(onClick = { viewModel.fetchUsage(sessionToken.value) }) { Text("Refresh Minutes") }
+                Button(onClick = { viewModel.fetchUsage() }) { Text("Refresh Minutes") }
                 Button(onClick = {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
                     }
                     permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
-                    projectionLauncher.launch(projectionManager?.createScreenCaptureIntent())
+                    projectionManager?.let { projectionLauncher.launch(it.createScreenCaptureIntent()) }
                 }) { Text("Screen Record/Share") }
 
-                Button(onClick = { context.startService(Intent(context, ScreenRecordService::class.java).apply { action = ScreenRecordService.ACTION_STOP }) }) {
-                    Text("Stop Recording")
-                }
+                Button(onClick = {
+                    context.startService(Intent(context, ScreenRecordService::class.java).apply { action = ScreenRecordService.ACTION_STOP })
+                }) { Text("Stop Recording") }
 
                 Button(onClick = {
                     state.sessionId?.let {
@@ -203,16 +213,10 @@ private fun BlastScreenRoot(viewModel: MainViewModel, logger: FirebaseEventLogge
                     hiddenTap += 1
                     if (hiddenTap >= 7) {
                         hiddenTap = 0
-                        val username = BuildConfig.ADMIN_PROVISION_USERNAME_1
-                        viewModel.hiddenAdminProvision(username, tokenStore)
+                        viewModel.hiddenAdminProvision(BuildConfig.ADMIN_PROVISION_USERNAME_1, tokenStore)
                     }
                 }) { Text("●") }
             }
         }
     }
-}
-
-@Composable
-private fun <T> StateFlow<T>.collectAsStateWithLifecycleCompat(): androidx.compose.runtime.State<T> {
-    return androidx.compose.runtime.collectAsState(this)
 }

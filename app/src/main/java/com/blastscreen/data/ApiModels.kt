@@ -3,6 +3,9 @@ package com.blastscreen.data
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
+data class GuestAuthResponse(val accessToken: String)
+
+@JsonClass(generateAdapter = true)
 data class QueueJoinRequest(val token: String)
 
 @JsonClass(generateAdapter = true)
